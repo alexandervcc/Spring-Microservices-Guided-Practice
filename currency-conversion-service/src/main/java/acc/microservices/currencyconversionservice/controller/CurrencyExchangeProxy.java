@@ -15,7 +15,14 @@ public interface CurrencyExchangeProxy {
 
 
 /*
-  - the url of the potin will go into the method
-  - the method will have the same structure as the method controller of the 
-  - service to call
+  FEIGN CONFIGURATION
+    - the url of the potin will go into the method
+    - the method will have the same structure as the method controller of the 
+    - service to call
+  
+  DYNAMIC PORTS FOR PROXY
+    - use Eureka Naming Server:  a discovery server
+    - in this services all instances of all microservices will register in this
+    - so services will ask the naming server for the instances of other services
+    - once these are known the services know where to send requests
 */
