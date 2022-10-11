@@ -15,6 +15,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CurrencyConversionController {
 
+    CurrencyExchangeProxy currencyExchangeProxy;
+
+    // static call to service
     @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversion(
             @PathVariable String from,
@@ -42,7 +45,28 @@ public class CurrencyConversionController {
                 .quantity(quantity)
                 .conversionMultiple(cc.getConversionMultiple())
                 .totalCalculatedAmount(quantity.multiply(cc.getConversionMultiple()))
-                .environment(cc.getEnvironment())
+                .environment(cc.getEnvironment() + " Static")
                 .build();
     }
+
+    @GetMapping("/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}")
+    public CurrencyConversion calculateCurrencyConversionFeign(
+            @PathVariable String from,
+            @PathVariable String to,
+            @PathVariable BigDecimal quantity) {
+
+        // call to the servive via FEign
+        CurrencyConversion cc = currencyExchangeProxy.retrieveExchangeValue(from, to);
+
+        return CurrencyConversion.builder()
+                .id(1001L)
+                .from(from)
+                .to(to)
+                .quantity(quantity)
+                .conversionMultiple(cc.getConversionMultiple())
+                .totalCalculatedAmount(quantity.multiply(cc.getConversionMultiple()))
+                .environment(cc.getEnvironment() + " Feign")
+                .build();
+    }
+
 }
